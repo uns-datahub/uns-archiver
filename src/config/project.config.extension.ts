@@ -1,0 +1,86 @@
+import { z } from "zod";
+
+export const projectExtrasSchema = z.object({
+  archiver: z
+    .object({
+      inactiveBufferMax: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe(
+          "Max number of events kept in-memory while waiting for the controller/GraphQL active-topics registry (default 2000). Overflow spills to ./event_storage.",
+        ),
+      inactiveBufferMaxAgeMs: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe(
+          "Max age (ms) for buffered inactive-topic events before spilling to ./event_storage (default 300000 = 5min).",
+        ),
+      traceIngest: z
+        .boolean()
+        .optional()
+        .describe(
+          "Enable ingest/buffer trace logs. Equivalent to setting UNS_ARCHIVER_TRACE=1 or UNS_ARCHIVER_TRACE_INGEST=1.",
+        ),
+    })
+    .optional()
+    .describe("Archiver runtime settings."),
+  questdb: z.object({
+    configurationString: z
+      .string()
+      .min(1, "QuestDB configuration string is required")
+      .describe("Connection string passed to QuestDB HTTP ingest"),
+    dataStorage: z
+      .array(
+        z.object({
+          tablePrefix: z
+            .string()
+            .min(1, "questdb.dataStorage[].tablePrefix is required")
+            .describe("Prefix used when naming QuestDB tables for this topic"),
+          topic: z
+            .string()
+            .min(1, "questdb.dataStorage[].topic is required")
+            .describe("UNS topic filter subscribed for ingestion"),
+          ingestMode: z
+            .enum(["append", "dedup", "window_replace"])
+            .optional()
+            .describe(
+              "Default ingestion mode: append (default), dedup (upsert on eventId), or window_replace. Note: QuestDB has no row-level DELETE; window_replace is implemented as soft delete (sets deleted=true for rows in the window that were not refreshed).",
+            ),
+          ingestModeData: z
+            .enum(["append", "dedup", "window_replace"])
+            .optional()
+            .describe("Optional override of ingestMode for data messages"),
+          ingestModeTable: z
+            .enum(["append", "dedup", "window_replace"])
+            .optional()
+            .describe("Optional override of ingestMode for table messages"),
+          dataGroups: z
+            .array(
+              z.object({
+                name: z.string().min(1, "questdb.dataStorage[].dataGroups[].name is required"),
+                ingestMode: z
+                  .enum(["append", "dedup", "window_replace"])
+                  .describe("Ingestion mode override for this dataGroup"),
+                ingestModeData: z
+                  .enum(["append", "dedup", "window_replace"])
+                  .optional()
+                  .describe("Optional override for data messages in this dataGroup"),
+                ingestModeTable: z
+                  .enum(["append", "dedup", "window_replace"])
+                  .optional()
+                  .describe("Optional override for table messages in this dataGroup"),
+              }),
+            )
+            .optional()
+            .describe("Per-dataGroup ingestion mode overrides"),
+        }),
+      )
+      .min(1, "At least one QuestDB data storage target is required"),
+  }),
+});
+
+export type ProjectExtras = z.infer<typeof projectExtrasSchema>;
