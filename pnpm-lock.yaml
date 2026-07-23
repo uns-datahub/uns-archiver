@@ -29,8 +29,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5(@aws-sdk/client-sso-oidc@3.600.0)(typescript@7.0.2)
       dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
+        specifier: ^17.4.2
+        version: 17.4.2
       zod:
         specifier: ^3.25.76
         version: 3.25.76
