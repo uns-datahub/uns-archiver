@@ -1,6 +1,6 @@
 # UNS Archiver
 
-UNS Archiver is a [UNS OpenHub](https://github.com/uns-datahub) add-on that persists
+UNS Archiver is a [UNS OpenHub](https://github.com/uns-openhub) add-on that persists
 UNS data and table packets to QuestDB. It discovers active topics through the
 controller, subscribes to configured MQTT topic filters, and publishes the resulting
 QuestDB table mappings back to the UNS infrastructure.

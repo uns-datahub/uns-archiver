@@ -7,11 +7,11 @@
   "author": "Aljoša Vister",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uns-datahub/uns-archiver.git"
+    "url": "git+https://github.com/uns-openhub/uns-archiver.git"
   },
-  "homepage": "https://github.com/uns-datahub/uns-archiver#readme",
+  "homepage": "https://github.com/uns-openhub/uns-archiver#readme",
   "bugs": {
-    "url": "https://github.com/uns-datahub/uns-archiver/issues"
+    "url": "https://github.com/uns-openhub/uns-archiver/issues"
   },
   "unsDatahub": {
     "schemaVersion": 1,
